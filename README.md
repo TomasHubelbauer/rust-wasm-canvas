@@ -17,3 +17,11 @@ cargo install --git https://github.com/alexcrichton/wasm-gc
 
 - Unix: `./cmd/watch.sh`
 - Windows: `cmd/watch.bat`
+
+## Studying
+
+See [doc/notes.md](doc/notes.md)
+
+## Contributing
+
+See [doc/tasks.md](doc/tasks.md)
