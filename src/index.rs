@@ -19,20 +19,18 @@ pub extern "C" fn dealloc(ptr: *mut c_void, cap: usize) {
 
 #[no_mangle]
 pub fn fill(pointer: *mut u8, width: usize, height: usize, time: usize /* f64 */) {
-  let length = width * height * 4; // RGBA
-  let data = unsafe { slice::from_raw_parts_mut(pointer, length) };
+  let data = unsafe {
+    slice::from_raw_parts_mut(pointer, width * height * 4) // RGBA
+  };
 
-  for channel_index in 0..length {
-    let pixel_index = channel_index / 4;
-    let y: usize = pixel_index / width;
-    let x: usize = pixel_index % width;
+  for pixel in 0..(width * height) {
+    let y: usize = pixel / width;
+    let x: usize = pixel % width;
+    let index = pixel * 4;
 
-    match channel_index % 4 {
-      0 => data[channel_index] = ((time + x) % 255) as u8, // R
-      1 => data[channel_index] = ((time + y) % 255) as u8, // G
-      2 => data[channel_index] = 128, // B
-      3 => data[channel_index] = 255, // A
-      _ => panic!("i % 4 not within 1 and 3"),
-    }
+    data[index + 0] = ((time + x) % 255) as u8; // R
+    data[index + 1] = ((time + y) % 255) as u8; // G
+    data[index + 2] = 128; // B
+    data[index + 3] = 255; // A
   }
 }
