@@ -16,11 +16,22 @@ window.addEventListener('load', async event => {
   const memory = new Uint8ClampedArray(module.instance.exports.memory.buffer, pointer, length);
   const data = new ImageData(memory, width, height);
 
-  let lastTimestamp;
+  const durations = Array(25);
+  let durationIndex = 0;
+  let lastTimestamp = 0;
+
   window.requestAnimationFrame(function step(timestamp) {
     module.instance.exports.fill(pointer, width, height, timestamp);
     context.putImageData(data, 0, 0);
-    document.title = `${(1000 / (timestamp - lastTimestamp)).toFixed(2)} FPS`;
+    durations[durationIndex++ % durations.length] = timestamp - lastTimestamp;
+    if (durationIndex < durations.length) {
+      document.title = `Collecting… ${((durationIndex / durations.length) * 100).toFixed(0)} %`;
+    } else {
+      const tpf = durations.reduce((a, b) => a + b, 0) / durations.length;
+      const fps = 1000 / tpf;
+      document.title = `FPS: ~${fps.toFixed(1)} | TPF: ~${tpf.toFixed(2)} ms`;
+    }
+    
     lastTimestamp = timestamp;
     window.requestAnimationFrame(step);
   });
