@@ -8,6 +8,7 @@ window.addEventListener('load', async event => {
     cos: Math.cos,
     tan: Math.tan,
     fmod: (a, b) => a % b,
+    round: Math.round,
   }; // Pass math functions such as sin, cos, round, etc. `x: Math.x`.
   module = await WebAssembly.instantiate(await response.arrayBuffer(), { env });
 
@@ -25,8 +26,25 @@ window.addEventListener('load', async event => {
   let durationIndex = 0;
   let lastTimestamp = 0;
 
+  const centerXInput = document.getElementById('centerXInput');
+  const centerYInput = document.getElementById('centerYInput');
+  const centerZInput = document.getElementById('centerZInput');
+
+  const cameraXInput = document.getElementById('cameraXInput');
+  const cameraYInput = document.getElementById('cameraYInput');
+  const cameraZInput = document.getElementById('cameraZInput');
+
+  const viewerXInput = document.getElementById('viewerXInput');
+  const viewerYInput = document.getElementById('viewerYInput');
+  const viewerZInput = document.getElementById('viewerYInput');
+
   window.requestAnimationFrame(function step(timestamp) {
-    module.instance.exports.fill(pointer, width, height, timestamp);
+    module.instance.exports.fill(
+      pointer, width, height, timestamp,
+      centerXInput.value, centerYInput.value, centerZInput.value,
+      cameraXInput.value, cameraYInput.value, cameraZInput.value,
+      viewerXInput.value, viewerYInput.value, viewerZInput.value,
+    );
     context.putImageData(data, 0, 0);
     durations[durationIndex++ % durations.length] = timestamp - lastTimestamp;
     if (durationIndex < durations.length) {
@@ -36,7 +54,7 @@ window.addEventListener('load', async event => {
       const fps = 1000 / tpf;
       document.title = `FPS: ~${fps.toFixed(1)} | TPF: ~${tpf.toFixed(2)} ms`;
     }
-    
+
     lastTimestamp = timestamp;
     window.requestAnimationFrame(step);
   });
