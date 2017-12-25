@@ -1,3 +1,15 @@
 # Rust WebAssembly Canvas
 
-[Demo](https://www.hellorust.com/demos/canvas/index.html)
+## Preparing
+
+```sh
+git clone https://github.com/TomasHubelbauer/rust-wasm-canvas.git
+chmod +x cmd/*.sh
+cargo install cargo-watch
+cargo install --git https://github.com/alexcrichton/wasm-gc
+```
+
+## Running
+
+- Unix: `cmd/watch.sh`
+- Windows: `cmd/watch.bat`
