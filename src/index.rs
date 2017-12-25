@@ -18,7 +18,7 @@ pub extern "C" fn dealloc(ptr: *mut c_void, cap: usize) {
 }
 
 #[no_mangle]
-pub fn fill(pointer: *mut u8, width: usize, height: usize, time: usize /* f64 */) {
+pub fn fill(pointer: *mut u8, width: usize, height: usize, time: f64) {
   let data = unsafe {
     slice::from_raw_parts_mut(pointer, width * height * 4) // RGBA
   };
@@ -28,9 +28,9 @@ pub fn fill(pointer: *mut u8, width: usize, height: usize, time: usize /* f64 */
     let x: usize = pixel % width;
     let index = pixel * 4;
 
-    data[index + 0] = ((time + x) % 255) as u8; // R
-    data[index + 1] = ((time + y) % 255) as u8; // G
-    data[index + 2] = 128; // B
+    data[index + 0] = data[index + 0] + (time % 30.) as u8; // R
+    data[index + 1] = data[index + 1] + (time % 20.) as u8; // G
+    data[index + 2] = data[index + 2] + (time % 10.) as u8; // B
     data[index + 3] = 255; // A
   }
 }

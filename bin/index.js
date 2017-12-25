@@ -3,7 +3,12 @@ let pointer;
 
 window.addEventListener('load', async event => {
   const response = await fetch('index.wasm');
-  const env = { }; // Pass math functions such as sin, cos, round, etc. `x: Math.x`.
+  const env = {
+    sin: Math.sin,
+    cos: Math.cos,
+    tan: Math.tan,
+    fmod: (a, b) => a % b,
+  }; // Pass math functions such as sin, cos, round, etc. `x: Math.x`.
   module = await WebAssembly.instantiate(await response.arrayBuffer(), { env });
 
   const canvas = document.getElementById('screen');
