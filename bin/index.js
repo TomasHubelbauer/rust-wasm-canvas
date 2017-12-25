@@ -43,6 +43,4 @@ window.addEventListener('load', async event => {
   window.requestAnimationFrame(step);
 });
 
-window.addEventListener('unload', event => {
-  module.dealloc(pointer);
-});
+window.addEventListener('unload', event => module.dealloc(pointer));
