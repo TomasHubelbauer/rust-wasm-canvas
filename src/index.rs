@@ -2,10 +2,6 @@ use std::mem;
 use std::slice;
 use std::os::raw::c_void;
 
-// We need to provide an (empty) main function, as the target currently is compiled as a binary.
-#[allow(dead_code)]
-fn main() {}
-
 #[no_mangle]
 pub extern "C" fn alloc(size: usize) -> *mut c_void {
   let mut buf = Vec::with_capacity(size);
