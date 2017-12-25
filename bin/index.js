@@ -4,7 +4,8 @@ let pointer;
 window.addEventListener('load', async event => {
   const response = await fetch('index.wasm');
   const buffer = await response.arrayBuffer();
-  const wasm = await WebAssembly.instantiate(buffer, { env: { cos: Math.cos } });
+  const env = { }; // Pass math functions such as sin, cos, round, etc. `x: Math.x`.
+  const wasm = await WebAssembly.instantiate(buffer, { env });
 
   module.alloc = wasm.instance.exports.alloc;
   module.dealloc = wasm.instance.exports.dealloc;

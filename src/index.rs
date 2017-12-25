@@ -2,12 +2,10 @@ use std::mem;
 use std::slice;
 use std::os::raw::c_void;
 
-// We need to provide an (empty) main function,
-// as the target currently is compiled as a binary.
+// We need to provide an (empty) main function, as the target currently is compiled as a binary.
 #[allow(dead_code)]
 fn main() {}
 
-// In order to work with the memory we expose (de)allocation methods
 #[no_mangle]
 pub extern "C" fn alloc(size: usize) -> *mut c_void {
   let mut buf = Vec::with_capacity(size);
@@ -23,41 +21,21 @@ pub extern "C" fn dealloc(ptr: *mut c_void, cap: usize) {
   }
 }
 
-// the Javascript side passes a pointer to a buffer, the size of the corresponding canvas
-// and the current timestamp
 #[no_mangle]
-pub fn fill(pointer: *mut u8, max_width: usize, max_height: usize, time: f64) {
-  // Pixels are stored in RGBA, so each pixel is 4 bytes
-  let length = max_width * max_height * 4;
-  let sl = unsafe { slice::from_raw_parts_mut(pointer, length) };
+pub fn fill(pointer: *mut u8, width: usize, height: usize, time: f64) {
+  let length = width * height * 4; // RGBA
+  let data = unsafe { slice::from_raw_parts_mut(pointer, length) };
 
-  for i in 0..length {
-    // Get the position of current pixel
-    let height = i / 4 / max_width;
-    let width = i / 4 % max_width;
+  for channel_index in 0..length {
+    let pixel_index = channel_index / 4;
+    let y = pixel_index / width;
+    let x = pixel_index % width;
 
-    match i % 4 {
-      // R
-      0 => {
-        // Create a red ripple effect from the top left corner
-        let len = ((height * height + width * width) as f64).sqrt();
-        let nb = time + len / 4.0;
-        let a = 128.0 + nb.cos() * 128.0;
-        sl[i] = a as u8;
-      }
-      // G
-      1 => continue,
-      // B
-      2 => {
-        // create a blue ripple effect from the top right corner
-        let width = 500 - width;
-        let len = ((height * height + width * width) as f64).sqrt();
-        let nb = time + len / 4.0;
-        let a = 128.0 + nb.cos() * 128.0;
-        sl[i] = a as u8;
-      }
-      // A
-      3 => sl[i] = 255, // Set opacity to 1,
+    match channel_index % 4 {
+      0 => data[channel_index] = 128, // R
+      1 => data[channel_index] = 128, // G
+      2 => data[channel_index] = 128, // B
+      3 => data[channel_index] = 255, // A
       _ => panic!("i % 4 not within 1 and 3"),
     }
   }
