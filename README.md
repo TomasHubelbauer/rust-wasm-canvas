@@ -3,6 +3,16 @@
 This is based on [the Hello Rust example](https://www.hellorust.com/demos/canvas/index.html)
 and the [minimal Rust & Wasm example](https://www.hellorust.com/demos/add/index.html).
 
+More resources on Rust & Wasm has since become available:
+
+- https://rustwasm.github.io
+- http://fitzgeraldnick.com/2018/12/14/rust-and-webassembly-in-2019.html
+- https://github.com/rustwasm/wasm-pack
+- https://www.rust-lang.org/what/wasm
+- https://rustwasm.github.io/docs/book
+- https://developer.mozilla.org/en-US/docs/WebAssembly/Rust_to_wasm
+- https://github.com/rustwasm
+
 ## Preparing
 
 Install PHP (by default on macOS) or replace file server in `cmd/watch.sh`.
