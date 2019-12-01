@@ -35,4 +35,4 @@ Note that `cargo watch` requires `Cargo.toml` to exist.
 
 ## To-Do
 
-Figure out how to use with Cargo and how to depend on crates.
+### Figure out how to use with Cargo and how to depend on crates
